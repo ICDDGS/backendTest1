@@ -27,20 +27,22 @@ export const register = async (req: Request, res: Response) => {
     }
 }
 
-export const login  = async(req: Request, res: Response) => {
-    const {email, password} = req.body;
+export const login = async (req: Request, res: Response) => {
+    try {
+        const { email, password } = req.body;
 
-    try{
-        const existingUser = await UserModel.findOne({email});
-        if (!existingUser) return res.json ({message: 'No se encuentra el usuario registrado con ese correo'});
+        const user = await UserModel.findOne({ email });
 
-        const pass = await bcrypt.compare(password, existingUser.password);
-        if(!pass) return res.json({message: 'Contraseña incorrecta'});
+        if (!user) return res.json({ message: 'Correo no encontrado' });
 
-        const token = jwt.sign({id:existingUser._id},JWT,{expiresIn: '1h'});
+        const isPasswordValid = await bcrypt.compare(password, user.password);
 
-        res.json({token});
-    }catch(e){
-        res.json({message: 'Error al inciar sesion ', error: e});
+        if (!isPasswordValid) {
+        return res.json({ message: 'Contraseña incorrecta' });
+        }
+
+        res.json({ message: 'Inicio de sesión exitoso' });
+    } catch (e) {
+        res.json({ message: 'Error al iniciar sesión', e });
     }
 };
