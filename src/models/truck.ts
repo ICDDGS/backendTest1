@@ -1,7 +1,7 @@
-import mongoose, { Schema, model, Document } from "mongoose";
+import { Schema, model, Document, Types } from "mongoose";
 
 export interface Truck extends Document{
-    user: mongoose.Types.ObjectId;
+    user: Types.ObjectId;
     year: string;
     color: string;
     plates: string;
