@@ -1,4 +1,4 @@
-import {Schema. model, Document, Types} from 'mongoose';
+import {Schema, model, Document, Types} from 'mongoose';
 
 export interface Location extends Document{
     user: Types.ObjectId;
@@ -32,3 +32,5 @@ const LocationSchema = new Schema<Location>({
         required: true,
     },
 });
+
+export const LocationModel = model<Location>('Location',LocationSchema);
