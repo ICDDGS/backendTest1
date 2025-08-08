@@ -28,22 +28,28 @@ export const register = async (req: Request, res: Response) => {
     }
 }
 
-export const login = async (req: Request, res: Response) => {
+    export const login = async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body;
+
         const user = await UserModel.findOne({ email });
-
-        if (user && await bcrypt.compare(password, user.password)) {
-            const token = generateToken({ id: user._id, email: user.email });
-
-            res.json({
-                message: 'Inicio de sesión exitoso',
-                token,
-            });
-        } else {
-            res.json({ message: 'Datos incorrectos' });
+        if (!user) {
+        return res.json({ message: 'Usuario no encontrado' });
         }
-    } catch (e) {
-        res.json({ message: 'Error al iniciar sesión', e });
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+        return res.json({ message: 'Contraseña incorrecta' });
+        }
+
+        const token = generateToken({ id: user._id, email: user.email });
+
+        return res.json({
+        message: 'Inicio de sesión exitoso',
+        token,
+        });
+    } catch (e: any) {
+        console.error('Error en login:', e);
+        return res.json({ message: 'Error al iniciar sesión', error: e.message || e });
     }
 };
