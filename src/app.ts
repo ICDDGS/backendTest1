@@ -3,7 +3,8 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
 
-import userRoutes from './routes/user_routes';
+import userRoutes from './routes/userRoutes';
+import truckRoutes from './routes/truckRoutes';
 
 dotenv.config();
 
@@ -11,7 +12,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use('/api/users', userRoutes)
+app.use('/api/users', userRoutes);
+app.use('/api/trucks',truckRoutes);
 
 app.get('/', (_req, res) => res.send('API de Bego funcionando'));
 

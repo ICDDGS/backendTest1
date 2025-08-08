@@ -1,13 +1,11 @@
 import { Request, Response } from "express";
 import { UserModel } from "../models/user";
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import { error } from "console";
 import { generateToken } from "../utils/jwt";
 
 const JWT = process.env.JWT_SECRET!;
 
-export const register = async (req: Request, res: Response) => {
+export const createUser = async (req: Request, res: Response) => {
     const {email, password} = req.body;
 
     try{
@@ -28,7 +26,7 @@ export const register = async (req: Request, res: Response) => {
     }
 }
 
-    export const login = async (req: Request, res: Response) => {
+    export const readUser = async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body;
 
