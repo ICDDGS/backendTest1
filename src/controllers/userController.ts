@@ -3,6 +3,7 @@ import { UserModel } from "../models/user";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { error } from "console";
+import { generateToken } from "../utils/jwt";
 
 const JWT = process.env.JWT_SECRET!;
 
@@ -30,18 +31,18 @@ export const register = async (req: Request, res: Response) => {
 export const login = async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body;
-
         const user = await UserModel.findOne({ email });
 
-        if (!user) return res.json({ message: 'Correo no encontrado' });
+        if (user && await bcrypt.compare(password, user.password)) {
+            const token = generateToken({ id: user._id, email: user.email });
 
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-
-        if (!isPasswordValid) {
-        return res.json({ message: 'Contraseña incorrecta' });
+            res.json({
+                message: 'Inicio de sesión exitoso',
+                token,
+            });
+        } else {
+            res.json({ message: 'Datos incorrectos' });
         }
-
-        res.json({ message: 'Inicio de sesión exitoso' });
     } catch (e) {
         res.json({ message: 'Error al iniciar sesión', e });
     }
