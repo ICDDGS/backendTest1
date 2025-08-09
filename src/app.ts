@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 
 import userRoutes from './routes/userRoutes';
 import truckRoutes from './routes/truckRoutes';
+import locationRoutes from './routes/locationRoutes'
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/trucks',truckRoutes);
+app.use('/api/locations', locationRoutes)
 
 app.get('/', (_req, res) => res.send('API de Bego funcionando'));
 
