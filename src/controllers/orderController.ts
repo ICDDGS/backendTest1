@@ -25,7 +25,7 @@ export const createOrder = async (req: Request, res: Response) => {
     }
 };
 
-export const getallOrders = async (req: Request, res: Response) => {
+export const getAllOrders = async (req: Request, res: Response) => {
     try{
         const user = (req as any).user.id;
         const orders = await OrderModel.find({user})
