@@ -33,7 +33,7 @@ export const getAllOrders = async (req: Request, res: Response) => {
         .populate('pickup')
         .populate('dropoff');
 
-        res.json({ count: orders.length, orders });
+        res.json({ orders });
     }catch(e){
         res.json({message: 'Error al mostrar orednes',e});
     }

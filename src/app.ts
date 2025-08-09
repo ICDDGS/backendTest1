@@ -17,7 +17,7 @@ app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/trucks',truckRoutes);
 app.use('/api/locations', locationRoutes);
-app.use('/api/order',orderRoutes);
+app.use('/api/orders',orderRoutes);
 
 app.get('/', (_req, res) => res.send('API de Bego funcionando'));
 
