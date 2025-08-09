@@ -3,27 +3,41 @@ import { LocationModel } from "../models/location";
 
 const GOOGLE_API_KEY = process.env.GOOGLE_MAPS_API_KEY!;
 
-export const createLocation = async (req: Request, res: Response) =>{
-    try{
-        const {place_id} = req.body;
-        const user = (req as any).user.id;
-        if(!place_id) return res.json({ message: 'Se requiere place_id'});
+export const createLocation = async (req: Request, res: Response) => {
+    try {
+        const { place_id } = req.body;
 
-        const exist = await LocationModel.findOne({ place_id});
-        if(exist) return res.json({message: 'La ubicacion ya existe'});
-        
-        const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${encodeURIComponent(place_id)}&fields=formatted_address,geometry/location,place_id&key=${GOOGLE_API_KEY}`;
+        if (!place_id) return res.json({ message: 'Se requiere place_id' });
+
+        const exist = await LocationModel.findOne({ place_id });
+        if (exist) return res.json({ message: 'La localizacion ya existe', location: exist });
+
+        const url = `https://places.googleapis.com/v1/places/${place_id}?fields=id,displayName,formattedAddress,location&key=${GOOGLE_API_KEY}`;
+
         const resp = await fetch(url);
         const data = await resp.json();
 
-        if (data.status !== 'OK') {
-            return res.json({ message: 'No se pudo resolver place_id', details: data.status });
-        }
+        if (!resp.ok) return res.json({message: 'No se pudo acceder a place_id'});
 
-    }catch(e){
-        res.json({message: "Error al crear la localizacion",e});
+        const user = (req as any).user.id;
+        const address = data.formattedAddress;
+        const lat = data.location.latitude;
+        const lng = data.location.longitude;
+
+        const loc = await LocationModel.create({
+        user,
+        address,
+        place_id,
+        latitude: lat,
+        longitude: lng,
+        });
+
+        return res.json(loc);
+    } catch (e) {
+        return res.json({ message: 'Error al crear la localizacion', e });
     }
 };
+
 
 export const getAllLocations = async (req: Request, res: Response) => {
     try{
@@ -65,7 +79,7 @@ export const deleteLocation = async (req: Request, res: Response) => {
         if (!location) return res.status(404).json({ message: 'localizacion no encontrada' });
         res.json({ message: 'localizacion eliminada' });
     } catch (e) {
-        res.status(500).json({ message: 'Error al eliminar', e });
+        res.json({ message: 'Error al eliminar', e });
     }
     };
 

@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/trucks',truckRoutes);
-app.use('/api/location', locationRoutes)
+app.use('/api/locations', locationRoutes)
 
 app.get('/', (_req, res) => res.send('API de Bego funcionando'));
 

@@ -3,7 +3,7 @@ import {Schema, model, Document, Types} from 'mongoose';
 export interface Location extends Document{
     user: Types.ObjectId;
     address: string;
-    pace_id: string;
+    place_id: string;
     latitude: number;
     longitude: number;
 }
@@ -18,7 +18,7 @@ const LocationSchema = new Schema<Location>({
         type: String,
         required: true,
     },
-    pace_id: {
+    place_id: {
         type:String,
         required:true,
         unique: true,

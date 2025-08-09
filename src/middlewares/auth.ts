@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
 dotenv.config();
-const KEY = process.env.JWT_SECRET!;
+const KEY = process.env.JWT_KEY!;
 
 export const verifyToken = (req: Request, res: Response, next: NextFunction) =>{
     const token = req.headers['authorization']?.split(' ')[1];

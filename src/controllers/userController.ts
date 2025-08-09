@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
 import { UserModel } from "../models/user";
 import bcrypt from 'bcryptjs';
-import { generateToken } from "../utils/jwt";
 
-const JWT = process.env.JWT_SECRET!;
+import { generateToken } from "../utils/jwt";
 
 export const createUser = async (req: Request, res: Response) => {
     const {email, password} = req.body;
