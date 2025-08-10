@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 
 import userRoutes from './routes/userRoutes';
@@ -13,11 +14,15 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.use(cors({ origin: 'http://localhost:5173', credentials: false }));
 app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/trucks',truckRoutes);
 app.use('/api/locations', locationRoutes);
 app.use('/api/orders',orderRoutes);
+
+
+export default app;
 
 app.get('/', (_req, res) => res.send('API de Bego funcionando'));
 
